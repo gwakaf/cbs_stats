@@ -1,0 +1,4 @@
+.env
+rsenv/
+logs/*
+__pycache__/
