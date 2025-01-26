@@ -19,6 +19,7 @@ The project offers lighthearted and engaging statistics for fans of this beloved
 
 ## Tech Stack and Architecture
 <img width="899" alt="Screenshot 2025-01-25 at 9 17 20 PM" src="https://github.com/user-attachments/assets/7f85cba4-2e6d-48b3-ba5a-3875a58751b9" />
+
 + Extract data using Reddit API
 + Load into AWS S3
 + Copy to AWS Redshift
