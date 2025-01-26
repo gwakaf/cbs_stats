@@ -46,7 +46,7 @@ def copy_command_s3_to_rds(iam_role, table_name, s3_path):
 
 
 
-"""Queries """
+"""SQL Statements """
 # Create posts_statistics table
 create_posts_stats_table_query = """
 CREATE TABLE posts_statistics (

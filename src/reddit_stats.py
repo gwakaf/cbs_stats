@@ -11,7 +11,7 @@ from logger import logger
 """
 
 
-run_date_str = config.execution_date_str
+RUN_DATE_STR = config.execution_date_str
 
 CLIENT_ID = os.getenv("CLIENT_ID")
 CLIENT_SECRET = os.getenv("CLIENT_SECRET")
@@ -39,7 +39,7 @@ def subreddit_weekly_statistics(reddit, subreddit, run_date_str):
             subreddit(str): subreddit name
             run_date_str(str): "%Y%m%d"
     """   
-    run_date = datetime.strptime(run_date_str, "%Y%m%d").date()
+    run_date = datetime.strptime(RUN_DATE_STR, "%Y%m%d").date()
     week_ago_date = run_date -timedelta(weeks=1)
     
     headers = ['post_id', 'created_timestamp', 'author', 'title', 'upvotes', 'comments', 'monday_of_the_week', 'created_date']
@@ -61,15 +61,16 @@ def subreddit_weekly_statistics(reddit, subreddit, run_date_str):
                 writer = csv.writer(csv_file)
                 writer.writerow([s.id, int(s.created_utc), s.author, s.title, s.score, s.num_comments, monday_of_the_week, submission_date])
             
-"""
-    Returns the length of the list of all submissions made in a year timeframe 
-    found by a search word in subreddit
-    Args:
+            
+def search_count(reddit, subreddit, search_word):
+    """
+        Returns the length of the list of all submissions made in a year timeframe 
+        found by a search word in subreddit
+        Args:
         reddit - reddit instance
         subreddit(str): subreddit name
         search_wotd: str
-"""
-def search_count(reddit, subreddit, search_word):
+    """
     try:
         submissions = reddit.subreddit(subreddit).search(query=search_word, sort="relevance", time_filter="year", limit=None)
     except Exception as e:
@@ -77,11 +78,12 @@ def search_count(reddit, subreddit, search_word):
     return len(list(submissions))
 
 
-"""     
-    Saving search results in .csv file: going through the list of names, 
-    calculating mentions count
-"""
+
 def popular_characters(reddit, subreddit, characters_list):
+    """     
+        Saving search results in .csv file: going through the list of names, 
+        calculating mentions count
+    """
     headers = ['name', 'count']
     with open(f"{config.TMP_FILE_PATH}{config.SEARCH_STATS_FILE_NAME}.csv",'w') as csv_file:
         writer = csv.writer(csv_file)
