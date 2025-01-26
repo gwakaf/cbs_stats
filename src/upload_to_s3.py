@@ -17,11 +17,6 @@ run_date_str = config.execution_date_str
 YEAR = run_date_str[:4]
 
 
-def main():
-    s3 = connect_to_s3()
-    config_bucket(s3, config.AWS_BUCKET_NAME)
-    upload_csv_to_s3(s3, config.AWS_BUCKET_NAME, f'posts_stats/{YEAR}/{config.POSTS_STATS_FILE_NAME}{run_date_str}.csv',f"{config.TMP_FILE_PATH}{config.POSTS_STATS_FILE_NAME}{run_date_str}.csv")
-
 
 def connect_to_s3():
     try:
@@ -57,7 +52,12 @@ def upload_csv_to_s3(s3, bucket_name, s3_path, csv_file):
     s3.Bucket(bucket_name).upload_file(csv_file,s3_path)
     
        
-    
+
+def main():
+    s3 = connect_to_s3()
+    config_bucket(s3, config.AWS_BUCKET_NAME)
+    upload_csv_to_s3(s3, config.AWS_BUCKET_NAME, f'posts_stats/{YEAR}/{config.POSTS_STATS_FILE_NAME}{run_date_str}.csv',f"{config.TMP_FILE_PATH}{config.POSTS_STATS_FILE_NAME}{run_date_str}.csv")
+ 
 if __name__ == "__main__":
     main()
     

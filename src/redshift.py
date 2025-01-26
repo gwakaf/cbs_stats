@@ -16,56 +16,6 @@ dbname = os.getenv("REDSHIFT_DBNAME")
 user = os.getenv("REDSHIFT_USER")
 password = os.getenv("REDSHIFT_PASSWORD")
 redshift_iam_role = os.getenv("REDSHIFT_IAM_ROLE")
-
-
-
-def main():
-    conn = connect_to_redshift()
-    cur = conn.cursor()
-    
-    try:
-        cur.execute(create_posts_stats_table_query)
-        cur.execute(create_search_stats_table_query)
-        conn.commit()
-        logger.info("Tables created successfully.")
-    except Exception as e:
-        print(f"Error creating table: {e}")
-        
-    try:
-        cur.execute(copy_command_s3_to_rds(redshift_iam_role,
-                                           "search_statistics",
-                                           f"s3://{config.AWS_BUCKET_NAME}/search_stats/{config.SEARCH_STATS_FILE_NAME}.csv"))
-        conn.commit()
-    except Exception as e:
-        logger.exception("Error copying the data to Redshift: ")
-        conn.rollback()
-        cur.execute(load_errors_query)
-        load_errors = cur.fetchall()
-        logger.error("Recent Redshift load errors:")
-        for error in load_errors:
-            logger.error(f"Time: {error[0]}, File: {error[1]}, Line: {error[2]}, "
-                        f"Column: {error[3]}, Type: {error[4]}, Reason: {error[5]}")
-        
-        
-        
-    try:
-        cur.execute(copy_command_s3_to_rds(redshift_iam_role,
-                                           "posts_statistics",
-                                           f"s3://{config.AWS_BUCKET_NAME}/posts_stats/{config.SEARCH_STATS_FILE_NAME}.csv"))
-    except Exception as e:
-        logger.exception("Error copying the data to Redshift: ")
-        conn.rollback()
-        cur.execute(load_errors_query)
-        load_errors = cur.fetchall()
-        logger.error("Recent Redshift load errors:")
-        for error in load_errors:
-            logger.error(f"Time: {error[0]}, File: {error[1]}, Line: {error[2]}, "
-                        f"Column: {error[3]}, Type: {error[4]}, Reason: {error[5]}")
-            
-        
-    cur.close()
-    conn.close()
-    logger.info("Connection closed.")
     
     
 
@@ -127,7 +77,53 @@ load_errors_query = """
     """
 
 
-
+def main():
+    conn = connect_to_redshift()
+    cur = conn.cursor()
+    
+    try:
+        cur.execute(create_posts_stats_table_query)
+        cur.execute(create_search_stats_table_query)
+        conn.commit()
+        logger.info("Tables created successfully.")
+    except Exception as e:
+        print(f"Error creating table: {e}")
+        
+    try:
+        cur.execute(copy_command_s3_to_rds(redshift_iam_role,
+                                           "search_statistics",
+                                           f"s3://{config.AWS_BUCKET_NAME}/search_stats/{config.SEARCH_STATS_FILE_NAME}.csv"))
+        conn.commit()
+    except Exception as e:
+        logger.exception("Error copying the data to Redshift: ")
+        conn.rollback()
+        cur.execute(load_errors_query)
+        load_errors = cur.fetchall()
+        logger.error("Recent Redshift load errors:")
+        for error in load_errors:
+            logger.error(f"Time: {error[0]}, File: {error[1]}, Line: {error[2]}, "
+                        f"Column: {error[3]}, Type: {error[4]}, Reason: {error[5]}")
+        
+        
+        
+    try:
+        cur.execute(copy_command_s3_to_rds(redshift_iam_role,
+                                           "posts_statistics",
+                                           f"s3://{config.AWS_BUCKET_NAME}/posts_stats/{config.SEARCH_STATS_FILE_NAME}.csv"))
+    except Exception as e:
+        logger.exception("Error copying the data to Redshift: ")
+        conn.rollback()
+        cur.execute(load_errors_query)
+        load_errors = cur.fetchall()
+        logger.error("Recent Redshift load errors:")
+        for error in load_errors:
+            logger.error(f"Time: {error[0]}, File: {error[1]}, Line: {error[2]}, "
+                        f"Column: {error[3]}, Type: {error[4]}, Reason: {error[5]}")
+            
+        
+    cur.close()
+    conn.close()
+    logger.info("Connection closed.")
 
 
 if __name__ == "__main__":

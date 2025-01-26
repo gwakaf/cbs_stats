@@ -17,11 +17,6 @@ CLIENT_ID = os.getenv("CLIENT_ID")
 CLIENT_SECRET = os.getenv("CLIENT_SECRET")
 USER_AGENT = os.getenv("USER_AGENT")
 
-def main():
-    reddit_instance = get_reddit()
-    subreddit_weekly_statistics(reddit_instance,config.SUBREDDIT,run_date_str)
-    popular_characters(reddit_instance, config.SUBREDDIT, config.CHARACTERS_LIST)
-
 
 def get_reddit():
     try:
@@ -99,6 +94,11 @@ def popular_characters(reddit, subreddit, characters_list):
             writer.writerow([character, n])
 
 
-    
+def main():
+    reddit_instance = get_reddit()
+    subreddit_weekly_statistics(reddit_instance,config.SUBREDDIT,run_date_str)
+    popular_characters(reddit_instance, config.SUBREDDIT, config.CHARACTERS_LIST)
+ 
+     
 if __name__ == "__main__":
     main()
