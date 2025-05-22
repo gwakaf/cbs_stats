@@ -1,5 +1,5 @@
 # Subreddit Statistics ETL
-Cormoran Strike Fandom Subreddit statistics.
+This ETL pipeline analyzes user activity on a subreddit dedicated to the Cormoran Strike novels by Robert Galbraith. It can be easily customized for a different subreddit by adjusting a few parameters.
 
 ## Table of Contents
 - [Overview](#overview)
@@ -13,9 +13,12 @@ Cormoran Strike Fandom Subreddit statistics.
 
 
 ## Overview
-This ETL pipeline analyzes activity on a subreddit dedicated to the Cormoran Strike novels by Robert Galbraith. It extracts data using the Reddit API, transforms it into a relational database format, stores the results in AWS S3, and visualizes the insights through a Looker Studio dashboard.
-The project offers lighthearted and engaging statistics for fans of this beloved crime fiction series. It is also highly adaptable, allowing users to analyze any other fandom by simply providing parameters such as the subreddit name and a list of characters.
-
+This is very basic, but very common data pipeline that illustrates the main steps found in many workflows:
+  - read data from external source and load it to staging area
+  - clean data and check errors
+  - apply transformations and load data to OLAP Data Warehouse 
+  - visualizing data insights
+![image](https://github.com/user-attachments/assets/26525067-d92d-41f6-9d97-6554fbf7aa44)
 
 ## Tech Stack and Architecture
 <img width="899" alt="Screenshot 2025-01-25 at 9 17 20 PM" src="https://github.com/user-attachments/assets/7f85cba4-2e6d-48b3-ba5a-3875a58751b9" />
