@@ -19,9 +19,6 @@ This is very basic, but very common data pipeline that illustrates the main step
   - apply transformations and load data to OLAP Data Warehouse 
   - visualizing data insights
 
-<img width="599" alt="st_pic" src="https://github.com/user-attachments/assets/8c882be1-1935-4f32-a5e8-d250498f537a" />
-
-
 
 ## Tech Stack and Architecture
 <img width="899" alt="Screenshot 2025-01-25 at 9 17 20 PM" src="https://github.com/user-attachments/assets/7f85cba4-2e6d-48b3-ba5a-3875a58751b9" />
@@ -66,11 +63,11 @@ To get historic information user can use airflow backfilling command
 
 ## Testing
 The airflow task is configured to execute the test.py file, which contains all the test cases written using the pytest framework.
-   ```bash
-      pytest src/test/test_reddit_etl.py
+     ```bash
+        pytest src/test/test_reddit_etl.py
 
+## Results
+Looker Studio Dashboard
 
+<img width="599" alt="st_pic" src="https://github.com/user-attachments/assets/8c882be1-1935-4f32-a5e8-d250498f537a" />
 
-
-
-   
