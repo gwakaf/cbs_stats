@@ -64,10 +64,12 @@ To backfill historical data, run:
 
 ## Testing/Data Quality
 The Airflow pipeline includes a validation task that runs Pytest checks for the ETL logic. These tests help verify that extracted Reddit data is cleaned, transformed, and prepared correctly before loading.
-     ```bash
-        pytest test/test_reddit_etl.py
 
-Example checks include:
+   ```bash
+    pytest test/test_reddit_etl.py
+```
+
++ Example checks include:
   - Required field checks for post title, author, created timestamp, score, and comment count.
   - Null and empty-value checks for fields used in transformations and dashboard metrics.
   - Type validation for numeric fields such as score, number of comments, and timestamps.
