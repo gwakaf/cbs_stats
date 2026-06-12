@@ -1,5 +1,5 @@
 # Subreddit Statistics ETL
-This ETL pipeline analyzes user activity on a subreddit dedicated to the Cormoran Strike novels by Robert Galbraith. It can be easily customized for a different subreddit by adjusting a few parameters.
+Airflow-orchestrated ETL pipeline extracts Reddit API data dedicated to the Cormoran Strike novels by Robert Galbraith, stages it in AWS S3, loads curated data into Redshift, validates transformations with Pytest, and visualizes trends in Looker Studio. It can be easily customized for a different subreddit by adjusting a few parameters.
 
 ## Table of Contents
 - [Overview](#overview)
