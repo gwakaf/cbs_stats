@@ -13,17 +13,18 @@ Airflow-orchestrated ETL pipeline extracts Reddit API data dedicated to the Corm
 
 
 ## Overview
-This is very basic, but very common data pipeline that illustrates the main steps found in many workflows:
-  - read data from external source and load it to staging area
-  - clean data and check errors
-  - apply transformations and load data to OLAP Data Warehouse 
-  - visualizing data insights
+This project demonstrates a common production-style analytics pipeline pattern:
+  - extract data from an external API
+  - load raw data into a staging area
+  - clean, validate, and transform the data
+  - load curated data into an OLAP data warehouse
+  - visualize analytical insights in a dashboard
 
 
 ## Tech Stack and Architecture
 <img width="899" alt="Screenshot 2025-01-25 at 9 17 20 PM" src="https://github.com/user-attachments/assets/7f85cba4-2e6d-48b3-ba5a-3875a58751b9" />
 
-+ Extract data using Reddit API
++ Extract data from Reddit API
 + Load into AWS S3
 + Copy to AWS Redshift
 + Visualize with Looker Studio Dashboard
@@ -32,18 +33,18 @@ This is very basic, but very common data pipeline that illustrates the main step
 
 ## Getting Started
 ### Prerequisites
-- docker to run airflow
+- docker to run Airflow locally
 - AWS S3 bucket
-- AWS redshift instance
-- Looker studio dashboard template
+- Amazon Redshift instance
+- Looker Studio dashboard template
   
 ### Configuration
-User has to set up environmental variables to connect:
+Set up environment variables for connections to:
 - Reddit API
 - AWS S3
 - AWS Redshift
 
-The required  dependencies are defined in docker-compose.yaml file as PIP_ADDITIONAL_REQUIREMENTS
+Required Python dependencies are defined in `docker-compose.yaml` using `PIP_ADDITIONAL_REQUIREMENTS`.
 
 ### Installation
 1. Clone the repository  
@@ -54,17 +55,26 @@ The required  dependencies are defined in docker-compose.yaml file as PIP_ADDITI
 4. Trigger airflow dag manually or schedule it
 
 ## Usage
-+ ETL pipeline runs weekly orchestrated by airflow, getting subreddit data and saving it to AWS S3 storage and AWS Redshidt tables
-To get historic information user can use airflow backfilling command
++ The ETL pipeline is scheduled to run weekly in Airflow. It extracts subreddit data, stores raw or staged data in AWS S3, and loads curated tables into Amazon Redshift.
+To backfill historical data, run:
    ```bash
     docker-compose exec airflow-scheduler airflow dags backfill -s 2023-01-01 -e 2024-10-31 reddit_pipeline_dag
 
 + To customize this project for another subreddit, you need to change the subreddit's name and the words of interest variables in src/config.py to your desired values.
 
-## Testing
-The airflow task is configured to execute the test.py file, which contains all the test cases written using the pytest framework.
+## Testing/Data Quality
+The Airflow pipeline includes a validation task that runs Pytest checks for the ETL logic. These tests help verify that extracted Reddit data is cleaned, transformed, and prepared correctly before loading.
      ```bash
         pytest src/test/test_reddit_etl.py
+
+Example checks include:
+  - Required field checks for post title, author, created timestamp, score, and comment count.
+  - Null and empty-value checks for fields used in transformations and dashboard metrics.
+  - Type validation for numeric fields such as score, number of comments, and timestamps.
+  - Duplicate detection to avoid loading the same Reddit post multiple times.
+  - Transformation checks to verify calculated metrics and keyword/category flags.
+  - Row-count checks between extraction, staging, and curated outputs.
+  - Load validation to confirm that curated data is available in Amazon Redshift for dashboarding.
 
 ## Results
 Looker Studio Dashboard
